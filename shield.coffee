@@ -84,7 +84,7 @@ class ShieldJS
       return null
 
     ###
-      Opera 7 to 9.5
+      Opera 7 to 9.50
     ###
     @linearb: (error) ->
       return null
@@ -152,11 +152,19 @@ class ShieldJS
       stackTrace
 
   @normalize: (error) ->
+    if error.number?
+      return Normalize.chakra error if error.stack?
+      return Normalize.jscript error
     if error.stack? and error.columnNumber?
       return Normalize.spidermonkey error
     if error.stack? and error.type?
       return Normalize.v8 error
     if error.stack? and error.sourceURL?
       return Normalize.javascriptcore error
+    if error['opera#sourceloc']?
+      if error.stacktrace?
+        return Normalize.carakan error if error.stack?
+        return Normalize.futhark error
+      return Normalize.linearb error
 
     return null

@@ -35,7 +35,7 @@ class ShieldJS
     ###
       Generates stack trace from v8's error object
     ###
-    v8: (error) ->
+    @v8: (error) ->
       regexStackRecord = /// ^               # Beginning of the line
         \s*at\s+                             # Ignore uninsteresting parts
         (?:\[object Object\]\.?)?            # Ignore [object Object].
@@ -69,7 +69,7 @@ class ShieldJS
       Generates stack trace from gecko's error object
       Note that gecko reports the column number only for the first stack frame
     ###
-    gecko: (error) ->
+    @gecko: (error) ->
       regexStackRecord = /// ^               # Beginning of the line
         (\S+)                                # Match[1]: Function name
         @
@@ -94,14 +94,10 @@ class ShieldJS
 
       stackTrace
 
-  normalizer = null
-  constructor: ->
-    @normalizer = new Normalize
-
-  normalize: (error) ->
-    if error.stack? and error.columnNumber
-      return @normalizer.gecko error
+  @normalize: (error) ->
+    if error.stack? and error.columnNumber?
+      return Normalize.gecko error
     if error.stack? and error.type?
-      return @normalizer.v8 error
+      return Normalize.v8 error
 
     return null

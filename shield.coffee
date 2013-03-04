@@ -36,7 +36,56 @@ class ShieldJS
       Opera 10.50+
     ###
     @carakan: (error) ->
-      return null
+      regexForDotStackTrace = /// ^          # Beginning of the line
+        (?:(Error thrown at|called from))    # Match the beginning of the line so we can skip the lines with code
+        \s+line(\d+),\s+                     # Match[1]: Line number
+        column\s+(\d+)\s+                    # Match[2]: Column number
+        in\s+
+          (?:<anonymous function:\s+)?       # Skip "<anonymous function: "
+          (\S+)                              # Match[3]: Function name
+          >?                                 # Ignore ">" for anonymous functions
+        (?:\(.*\))\s+                        # Ignore the function signature
+        in\s+
+        (                                    # Match[4]: URL
+          (?:(?:file|https?):?/*)
+          .*
+        )
+        :
+        $ ///                                # EOL
+
+      regexForDotStack = /// ^               # Beginning of the line
+        (?:<anonymous function:\s+)?         # Skip "<anonymous function: "
+        (\S+)                                # Match[1]: Function name
+        >?                                   # Ignore ">" for anonymous functions
+        (?:\(.*\))\s+                        # Ignore the function signature
+        @
+        (                                    # Match[2]: URL
+          (?:(?:file|https?):?/*)
+          .*
+        )
+        :
+        (\d+)                                # Match[3]: Line number
+        $ ///                                # EOL
+
+      stackTrace = new StackTrace
+      stackTrace.message = error.message
+
+      lines = error.stacktrace.split '\n'
+
+      if error.stack == error.stacktrace
+        for i in [0...lines.length]
+          matches = regexForDotStack.exec lines[i]
+          continue if matches is null
+          record = new StackRecord matches[1], matches[2], matches[3], 0
+          stackTrace.addRecord record
+      else
+        for i in [0...lines.length]
+          matches = regexForDotStackTrace.exec lines[i]
+          continue if matches is null
+          record = new StackRecord matches[3], matches[4], matches[1], matches[2]
+          stackTrace.addRecord record
+
+      stackTrace
 
     ###
       IE 9+

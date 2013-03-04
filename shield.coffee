@@ -33,43 +33,10 @@ class StackRecord
 class ShieldJS
   class Normalize
     ###
-      Generates stack trace from v8's error object
+      Generates stack trace from spidermonkey's error object
+      Note that the column number is only available for the first stack frame
     ###
-    @v8: (error) ->
-      regexStackRecord = /// ^               # Beginning of the line
-        \s*at\s+                             # Ignore uninsteresting parts
-        (?:\[object Object\]\.?)?            # Ignore [object Object].
-        (\S+)                                # Match[1]: Function name
-        \s+
-        \(                                   # parentheses around the location
-          (                                  # Match[2]: URL
-            (?:(?:file|https?):?/*)
-            [^:]+                            # Anything until the colon
-          )
-          :(\d+)                             # Match[3]: Line number
-          :(\d+)                             # Match[4]: Column number
-        \)
-        \s*                                  # Ignore trailing spaces
-        $ ///                                # EOL
-
-      stackTrace = new StackTrace
-      stackTrace.message = error.message
-
-      lines = error.stack.split '\n'
-
-      for i in [1...lines.length]
-        matches = regexStackRecord.exec lines[i]
-        continue if matches is null
-        record = new StackRecord matches[1], matches[2], matches[3], matches[4]
-        stackTrace.addRecord record
-
-      stackTrace
-
-    ###
-      Generates stack trace from gecko's error object
-      Note that gecko reports the column number only for the first stack frame
-    ###
-    @gecko: (error) ->
+    @spidermonkey: (error) ->
       regexStackRecord = /// ^               # Beginning of the line
         (\S+)                                # Match[1]: Function name
         @
@@ -94,9 +61,64 @@ class ShieldJS
 
       stackTrace
 
+    ###
+      Generates stack trace from v8's error object
+    ###
+    @v8: (error) ->
+      regexStackRecord = /// ^               # Beginning of the line
+              \s*at\s+                             # Ignore uninsteresting parts
+              (?:\[object Object\]\.?)?            # Ignore [object Object].
+              (\S+)                                # Match[1]: Function name
+              \s+
+              \(                                   # parentheses around the location
+                (                                  # Match[2]: URL
+                  (?:(?:file|https?):?/*)
+                  [^:]+                            # Anything until the colon
+                )
+                :(\d+)                             # Match[3]: Line number
+                :(\d+)                             # Match[4]: Column number
+              \)
+              \s*                                  # Ignore trailing spaces
+              $ ///                                # EOL
+
+      stackTrace = new StackTrace
+      stackTrace.message = error.message
+
+      lines = error.stack.split '\n'
+
+      for i in [1...lines.length]
+        matches = regexStackRecord.exec lines[i]
+        continue if matches is null
+        record = new StackRecord matches[1], matches[2], matches[3], matches[4]
+        stackTrace.addRecord record
+
+      stackTrace
+
+    @carakan: (error) ->
+      return null
+
+    @chakra: (error) ->
+      return null
+
+    @futhark: (error) ->
+      return null
+
+    @javascriptcore: (error) ->
+      return null
+
+    @jscript: (error) ->
+      return null
+
+    @linearb: (error) ->
+      return null
+
+    @nitro: (error) ->
+      return null
+
+
   @normalize: (error) ->
     if error.stack? and error.columnNumber?
-      return Normalize.gecko error
+      return Normalize.spidermonkey error
     if error.stack? and error.type?
       return Normalize.v8 error
 

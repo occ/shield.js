@@ -17,11 +17,11 @@ class SpiderMonkey extends JSEngine
 
   @normalizeError: (error) ->
     regexStackRecord = /// ^               # Beginning of the line
-      (\S+)                                # Match[1]: Function name
+      (\S+)?                               # Match[1]: Function name
       @
       (                                    # Match[2]: URL
         (?:(?:file|https?):?/*)
-        [^:]+                              # Anything until the colon
+        .+                                 # Anything
       )
       :(\d+)                               # Match[3]: Line number
       \s*                                  # Ignore trailing spaces
@@ -29,13 +29,14 @@ class SpiderMonkey extends JSEngine
 
     stackTrace = new StackTrace @pluginName()
     stackTrace.message = error.message
+    stackTrace.name = error.name if error.name?
 
     lines = error.stack.split '\n'
     for i in [0...lines.length]
       matches = regexStackRecord.exec lines[i]
       continue if matches is null
-      record = new StackRecord matches[1], matches[2], matches[3], 0
-      record.columnNumber = error.columnNumber if i == 0
+      record = new StackRecord (matches[1] ? ''), matches[2], matches[3], 0
+      record.columnNumber = (error.columnNumber if i == 0 and error.columnNumber?) ? 0
       stackTrace.addRecord record
 
     stackTrace

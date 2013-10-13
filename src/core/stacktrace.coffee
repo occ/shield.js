@@ -19,7 +19,8 @@ class StackTrace
   ###
   constructor: (@mode) ->
     @records = []
-    @userAgent = navigator?.userAgent
+    @userAgent = navigator.userAgent if navigator?
+    @url = window.location.href if window? and window.location?
 
   ###*
   # TODO

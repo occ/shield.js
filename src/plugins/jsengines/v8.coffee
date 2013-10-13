@@ -17,28 +17,29 @@ class V8 extends JSEngine
     regexStackRecord = /// ^               # Beginning of the line
       \s*at\s+                             # Ignore uninsteresting parts
       (?:\[object Object\]\.?)?            # Ignore [object Object].
-      (\S+)                                # Match[1]: Function name
-      \s+
-      \(                                   # parentheses around the location
+      (\S+)?                               # Match[1]: Function name
+      \s*
+      \(?                                  # parentheses around the location
         (                                  # Match[2]: URL
           (?:(?:file|https?):?/*)
-          [^:]+                            # Anything until the colon
+          .+                               # Anything
         )
         :(\d+)                             # Match[3]: Line number
         :(\d+)                             # Match[4]: Column number
-      \)
+      \)?
       \s*                                  # Ignore trailing spaces
       $ ///                                # EOL
 
     stackTrace = new StackTrace @pluginName()
     stackTrace.message = error.message
+    stackTrace.name = error.name if error.name?
 
     lines = error.stack.split '\n'
 
     for i in [1...lines.length]
       matches = regexStackRecord.exec lines[i]
       continue if matches is null
-      record = new StackRecord matches[1], matches[2], matches[3], matches[4]
+      record = new StackRecord (matches[1] ? ''), matches[2], matches[3], matches[4]
       stackTrace.addRecord record
 
     stackTrace

@@ -18,6 +18,9 @@ module.exports = (grunt) ->
             'src/plugins/jsengine.coffee'
             'src/plugins/jsengines/*.coffee'
           ]
+          'dist/test.js': [
+            'test/**/*.coffee'
+          ]
 
     uglify:
       shieldjs_dist:

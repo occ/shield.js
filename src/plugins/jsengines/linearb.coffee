@@ -1,6 +1,10 @@
-###
-  LinearB JS Engine
-  Opera 7 to 9.50
+###*
+# JSEngine plugin for LinearB JS Engine
+#
+# Opera 7 to 9.50
+#
+# @class LinearB
+# @extends JSEngine
 ###
 class LinearB extends JSEngine
   @pluginName: -> "linearb"
@@ -34,3 +38,5 @@ class LinearB extends JSEngine
       stackTrace.addRecord record
 
     stackTrace
+
+ShieldJS.registerPlugin LinearB

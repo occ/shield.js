@@ -1,10 +1,12 @@
-###
-  Basic container for a stack frame.
+###*
+# Basic container for a stack frame
+#
+# @class StackRecord
 ###
 class StackRecord
-  columnNumber = null
-  functionName = null
-  lineNumber = null
-  location = null
-
+  ###*
+  # TODO
+  #
+  # @constructor
+  ###
   constructor: (@functionName, @location, @lineNumber, @columnNumber) ->

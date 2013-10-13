@@ -1,6 +1,10 @@
-###
-  v8 JS Engine
-  Google Chrome
+###*
+# JSEngine plugin for V8 JS Engine
+#
+# Google Chrome
+#
+# @class V8
+# @extends JSEngine
 ###
 class V8 extends JSEngine
   @pluginName: -> "v8"
@@ -38,3 +42,5 @@ class V8 extends JSEngine
       stackTrace.addRecord record
 
     stackTrace
+
+ShieldJS.registerPlugin V8

@@ -1,6 +1,10 @@
-###
-  JavascriptCore JS Engine
-  Safari
+###*
+# JSEngine plugin for JavascriptCore JS Engine
+#
+# Safari
+#
+# @class JavascriptCore
+# @extends JSEngine
 ###
 class JavascriptCore extends JSEngine
   @pluginName: -> "javascriptcore"
@@ -32,3 +36,5 @@ class JavascriptCore extends JSEngine
       stackTrace.addRecord record
 
     stackTrace
+
+ShieldJS.registerPlugin JavascriptCore

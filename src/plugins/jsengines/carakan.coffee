@@ -1,6 +1,10 @@
-###
-  Carakan JS Engine
-  Opera 10.50+
+###*
+# JSEngine plugin for Carakan JS Engine
+#
+# Opera 10.50+
+#
+# @class Carakan
+# @extends JSEngine
 ###
 class Carakan extends JSEngine
   @pluginName: -> "carakan"

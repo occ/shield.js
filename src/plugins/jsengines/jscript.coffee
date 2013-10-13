@@ -1,6 +1,10 @@
-###
-  JScript JS Engine
-  Internet Explorer 5.5 to 8
+###*
+# JSEngine plugin for JScript JS Engine
+#
+# Internet Explorer 5.5 to 8
+#
+# @class JScript
+# @extends JSEngine
 ###
 class JScript extends JSEngine
   @pluginName: -> "jscript"
@@ -10,4 +14,7 @@ class JScript extends JSEngine
     error.number?
 
   @normalizeError: (error) ->
+    # TODO
     return null
+
+ShieldJS.registerPlugin JScript

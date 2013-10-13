@@ -2,6 +2,8 @@
 
 module.exports = (grunt) ->
   grunt.initConfig
+    pkg: grunt.file.readJSON 'package.json'
+
     coffee:
       compile:
         options:
@@ -16,6 +18,7 @@ module.exports = (grunt) ->
             'src/plugins/jsengine.coffee'
             'src/plugins/jsengines/*.coffee'
           ]
+
     uglify:
       shieldjs_dist:
         options:
@@ -26,9 +29,22 @@ module.exports = (grunt) ->
         files:
           'dist/shield.min.js': ['dist/shield.js']
 
-  grunt.loadNpmTasks('grunt-contrib-coffee');
+    yuidoc:
+      compile:
+        description: '<%= pkg.description %>'
+        name: '<%= pkg.name %>'
+        url: '<%= pkg.homepage %>'
+        version: '<%= pkg.version %>'
+        options:
+          extension: '.coffee'
+          outdir: 'dist/docs/'
+          paths: [ 'src/' ]
+          syntaxtype: 'coffee'
 
+
+  grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
   grunt.registerTask 'test', 'Try Logging', ->
     grunt.log.write('Running the default task')

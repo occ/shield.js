@@ -1,8 +1,12 @@
-###
-  SpiderMonkey JS Engine
-  Mozilla Applications
-
-  Note that the column number is only available for the first stack frame
+###*
+# JSEngine plugin for SpiderMonkey JS Engine
+#
+# Mozilla Applications
+#
+# NOTE The column number is only available for the first stack frame
+#
+# @class SpiderMonkey
+# @extends JSEngine
 ###
 class SpiderMonkey extends JSEngine
   @pluginName: -> "spidermonkey"
@@ -35,3 +39,5 @@ class SpiderMonkey extends JSEngine
       stackTrace.addRecord record
 
     stackTrace
+
+ShieldJS.registerPlugin SpiderMonkey

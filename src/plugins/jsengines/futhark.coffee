@@ -1,6 +1,10 @@
-###
-  Futhark JS Engine
-  Opera 9.50 to 10.10
+###*
+# JSEngine plugin for Futhark JS Engine
+#
+# Opera 9.50 to 10.10
+#
+# @class Futhark
+# @extends JSEngine
 ###
 class Futhark extends JSEngine
   @pluginName: -> "futhark"
@@ -34,3 +38,5 @@ class Futhark extends JSEngine
       stackTrace.addRecord record
 
     stackTrace
+
+ShieldJS.registerPlugin Futhark

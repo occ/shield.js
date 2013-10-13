@@ -15,14 +15,14 @@ class Carakan extends JSEngine
 
   @normalizeError: (error) ->
     regexForDotStackTrace = /// ^          # Beginning of the line
-      (?:(Error thrown at|called from))    # Match the beginning of the line so we can skip the lines with code
-      \s+line(\d+),\s+                     # Match[1]: Line number
+      (?:(Error.thrown.at|called.from))    # Match the beginning of the line so we can skip the lines with code
+      \s+line\s+(\d+),\s+                     # Match[1]: Line number
       column\s+(\d+)\s+                    # Match[2]: Column number
       in\s+
-        (?:<anonymous function:\s+)?       # Skip "<anonymous function: "
+        (?:<anonymous.function:\s+)?       # Skip "<anonymous function: "
         (\S+)                              # Match[3]: Function name
         >?                                 # Ignore ">" for anonymous functions
-      (?:\(.*\))\s+                        # Ignore the function signature
+      (?:\(.*\))\s*                        # Ignore the function signature
       in\s+
       (                                    # Match[4]: URL
         (?:(?:file|https?):?/*)
@@ -32,10 +32,12 @@ class Carakan extends JSEngine
       $ ///                                # EOL
 
     regexForDotStack = /// ^               # Beginning of the line
-      (?:<anonymous function:\s+)?         # Skip "<anonymous function: "
-      (\S+)                                # Match[1]: Function name
-      >?                                   # Ignore ">" for anonymous functions
-      (?:\(.*\))\s+                        # Ignore the function signature
+      (?:                                  # Function name may or may not exist
+        (?:<anonymous.function:\s+)?       # Skip "<anonymous function: "
+        (\S+)                              # Match[1]: Function name
+        >?                                 # Ignore ">" for anonymous functions
+        (?:\(.*\))\s*                      # Ignore the function signature
+      )?
       @
       (                                    # Match[2]: URL
         (?:(?:file|https?):?/*)

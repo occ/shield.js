@@ -25,7 +25,7 @@ class JavascriptCore extends JSEngine
           \s*                                  # Ignore trailing spaces
           $ /// # EOL
 
-    stackTrace = new StackTrace
+    stackTrace = new StackTrace @pluginName()
     stackTrace.message = error.message
 
     lines = error.stack.split '\n'

@@ -24,7 +24,7 @@ class Futhark extends JSEngine
       $ ///                                # EOL
     regexErrorMessage = /^Statement on[^:]*: ([^\n]*)$/
 
-    stackTrace = new StackTrace
+    stackTrace = new StackTrace @pluginName()
 
     matches = regexErrorMessage.exec error.message
     stackTrace.message = matches[1] if matches is not null

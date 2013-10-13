@@ -24,7 +24,7 @@ class LinearB extends JSEngine
       $ ///                                # EOL
     regexErrorMessage = /^Statement on[^:]*: ([^\n]*)$/
 
-    stackTrace = new StackTrace
+    stackTrace = new StackTrace @pluginName()
 
     lines = error.stack.split '\n'
     matches = regexErrorMessage.exec lines[0]

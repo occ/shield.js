@@ -45,7 +45,7 @@ class Carakan extends JSEngine
       (\d+)                                # Match[3]: Line number
       $ ///                                # EOL
 
-    stackTrace = new StackTrace
+    stackTrace = new StackTrace @pluginName()
     stackTrace.message = error.message
 
     lines = error.stacktrace.split '\n'

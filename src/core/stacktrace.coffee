@@ -15,8 +15,9 @@ class StackTrace
   # TODO
   #
   # @constructor
+  # @param {String} Mode - Plugin used to generate the stack trace
   ###
-  constructor: ->
+  constructor: (@mode) ->
     @records = []
     @userAgent = navigator?.userAgent
 
